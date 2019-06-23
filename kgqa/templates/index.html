@@ -1,0 +1,385 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>So</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <!-- font-awesome -->
+    <link rel="stylesheet" href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.css" icrossorigin="anonymous">
+
+    <script src="https://cdn.bootcss.com/d3/3.5.17/d3.min.js" charset="utf-8"></script>  
+
+
+    <style type="text/css">     
+        a{
+          color: #283ca0;
+        }
+        body,html{height:100%;background-color:#fff; /*overflow-x: hidden;*/}
+        /*body{display:-ms-flexbox;display:-webkit-box;display:flex;-ms-flex-pack:center;-webkit-box-pack:center;justify-content:center;color:#fff;text-shadow:0 .05rem .1rem rgba(0,0,0,.5);box-shadow:inset 0 0 5rem rgba(0,0,0,.5)}*/
+        
+        .footer{color:rgba(0, 0, 0,.5); position: absolute; bottom: 10px;text-align: center;font-size: 0.8em;}
+        .footer .links{font-size: 0.9em;}
+
+        .loading-box{
+        	padding: 10px 77px;
+        	border-radius: 5px;
+        	background:rgba(0, 0, 0,.5);
+        	position: fixed;
+        	color: #fff;
+        	right: 20px;
+        	top: 65px;
+        }
+
+        .search-box{
+          top: 25%;
+          text-align: center;
+          width: 100%;
+          position: absolute;
+        }
+        .search-box .logo{
+          text-align: center;
+        }
+        .search-box .logo img{
+          border: 0;
+        }
+        .search-box .search-input{
+          width: 600px;
+          margin: 0 auto;
+          padding: 4px 5px;
+          border: 1px #CECECE solid;
+          border-radius: 2px;
+        }
+
+        .top-search-nav{
+          width: 100%;
+          margin: 0 auto;
+          padding: 10px;
+          border-bottom: 1px solid #EBEDF4; 
+          display: none;
+          position: fixed;
+          top: 0%;
+          z-index: 999;
+        }
+        .top-search-nav .logo{
+          text-align: center;
+        }
+        .top-search-nav .logo img{
+          height: 40px;
+        }
+        .top-search-nav .search-input{
+          border: 0px;
+          border-radius: 0px;
+          padding: 10px 8px;
+          width: 100%;
+          border-left: 1px solid #EBEDF4;
+          background: rgba(255,255,255, 0);
+        }
+        .top-search-nav .close{
+          color: #AAB8A3;
+          font-size: 1.5em;
+          padding: 10px;
+          margin: 0 auto;
+        }
+
+        .search-content{
+          width: 99%;
+          padding: 10px;
+          display: none;
+          margin: 0 auto;
+          margin-top: 60px;
+        }
+
+        .search-content div{
+          margin: 0  auto;
+        }
+
+        .link {
+          stroke: #ccc;
+          stroke-dasharray: 0,2 1;
+        }
+
+        .link.answer {
+          stroke: green;
+          stroke-dasharray: 0,0 0;
+        }
+
+        text {
+          font: 12px sans-serif;
+          pointer-events: none;
+          text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, 0 -1px 0 #fff, -1px 0 0 #fff;
+        }
+
+    </style>
+  </head>
+  <body>
+   <div class="top-search-nav" id="top-search-nav">
+      <div class="row">
+        <div class="col-sm-1">
+          <div class="logo"><img src="{{ url_for('static', filename='logo.png') }}" alt="logo"></div>
+        </div>
+        <div class="col-sm-10">
+          <input id="top-search-input" class="search-input" placeholder="search"/>
+        </div>
+        <div class="col-sm-1">
+          <div class="text-center"><span class="fa fa-times close" alt="logo" onclick="closeit()"></span></div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="search-content" id="search-content">
+      <div class="answer-box" style="text-align: center; font-weight: bold" id="answer-box"></div>
+      <div class='graph-box' id="graph-box"></div>
+    </div>
+
+    <div class="search-box" id="search-box">
+      <div class="logo"><img src="{{ url_for('static', filename='logo.png') }}"></div>
+      <input id="search-input" class="search-input" placeholder="search"/>
+    </div>
+
+    <div style="width: 100%;" class="footer" id="footer">
+        <div class="inner">
+          <p>copyright &copy; <a href="https://github.com/liuyuzhangolvz" target="_blank">lyz</a></p>
+          <div><a href="#" target="_blank">协议</a> &bull; <a href="#" target="_blank">注册</a>  &bull; <a href="#" target="_blank">登录</a></div>
+        </div>
+    </div>
+
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://cdn.bootcss.com/jquery/3.3.0/jquery.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.bootcss.com/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.bootcss.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <!-- d3.js -->
+    <script src="https://cdn.bootcss.com/d3/3.5.17/d3.min.js" charset="utf-8"></script>
+    <script src="//d3js.org/d3.v3.min.js"></script>
+
+    <script>
+        // http://blog.thomsonreuters.com/index.php/mobile-patent-suits-graphic-of-the-day/
+        var w = 1000;
+        var h = 600;
+        var linkDistance=200;
+
+        var colors = d3.scale.category10();
+
+        var last_query = '';
+
+        var render = function(arr){
+          var template = ''
+          for (var i=0; i<arr.length; i++){
+            template += '<div class="info">'
+              template += '<div class"doc">'+ arr[i] +'</div>'
+            template += '</div>'
+          }
+          return template
+        }
+
+        var closeit = function() {
+          $('#search-content').fadeOut(600)
+          $('#top-search-nav').fadeOut(600)
+          $('#search-box').fadeIn(800)
+          $('#footer').fadeIn(800)
+        }
+
+        var listen_search = function(){
+          $('#search-input').bind('keyup', function(event) {
+            if (event.keyCode == 13) {
+                //回车执行查询
+                var query = $.trim($(this).val())
+                if (query.length == 0){
+                  return false;
+                }else{
+                  $('#top-search-input').val(query)
+                  $('#top-search-nav').fadeIn(800)
+                  $('#search-box').fadeOut(600)
+                  $('#footer').fadeOut(600)
+                  searchit(query);
+                }
+            }
+          });
+
+          $('#top-search-input').bind('keyup', function(event) {
+            if (event.keyCode == 13) {
+              //回车执行查询
+              var query = $.trim($(this).val())
+              if (query.length == 0){
+                $('#top-search-input').val('')
+                $('#search-input').val('')
+                closeit()
+              }else{
+                $('#search-input').val(query)
+                searchit(query)
+              }
+            }
+
+          })
+        }
+
+        function searchit(query){
+          $.ajax({
+              url: "/search",
+              type: 'POST', 
+              data: {'query': query},
+              success: function(json){
+                if (json.code && json.code == 200){
+                  if (json.links) {
+                    $('#search-content').fadeIn(200)
+
+                    render_kg(json.links, true);
+                    if (json.answers) {
+                      render_answer(json.answers)
+                    }
+                  } else{
+                    d3.select('#graph-box').selectAll('*').remove();  //清空SVG中的内容
+                  }
+                } else {
+                  alert("查询不到结果！")
+                }
+              }
+            });
+        }
+
+        function render_answer(answers){
+          text = ""
+          for (var i=0; i<answers.length; i++){
+            text += answers[i][0] + ": " + answers[i][1]
+          }
+          $("#answer-box").html(text)
+        }
+
+        function render_kg(dataset, reload){
+          if (reload){
+            d3.select('#graph-box').selectAll('*').remove();  //清空SVG中的内容
+          } 
+
+          var width = $('body').width()-50;
+          var height = $('body').height()-50;
+
+          var svg = d3.select("#graph-box").append("svg").attr({"width": width, "height": height});
+
+          var force = d3.layout.force()
+              .nodes(dataset.nodes)
+              .links(dataset.edges)
+              .size([w,h])
+              .linkDistance([linkDistance])
+              .charge([-500])
+              .theta(0.1)
+              .gravity(0.05)
+              .start();
+
+          var edges = svg.selectAll("line")
+            .data(dataset.edges)
+            .enter()
+            .append("line")
+            .attr("id",function(d,i) {return 'edge'+i})
+            .attr("class", function(d) { return "link " + d.type;})
+            .attr('marker-end','url(#arrowhead)')
+            .style("pointer-events", "none");
+          
+          var nodes = svg.selectAll("circle")
+            .data(dataset.nodes)
+            .enter()
+            .append("circle")
+            .attr({"r":15})
+            .style("fill",function(d,i){return colors(i);})
+            .call(force.drag)
+
+          var nodelabels = svg.selectAll(".nodelabel") 
+             .data(dataset.nodes)
+             .enter()
+             .append("text")
+             .attr({"x":function(d){return d.x;},
+                    "y":function(d){return d.y;},
+                    "class":"nodelabel",
+                    "stroke":"black"})
+             .text(function(d){return d.name;});
+
+          var edgepaths = svg.selectAll(".edgepath")
+              .data(dataset.edges)
+              .enter()
+              .append('path')
+              .attr({'d': function(d) {return 'M '+d.source.x+' '+d.source.y+' L '+ d.target.x +' '+d.target.y},
+                     'class':'edgepath',
+                     'fill-opacity':0,
+                     'stroke-opacity':0,
+                     'fill':'blue',
+                     'stroke':'red',
+                     'id':function(d,i) {return 'edgepath'+i}})
+              .style("pointer-events", "none");
+
+          var edgelabels = svg.selectAll(".edgelabel")
+              .data(dataset.edges)
+              .enter()
+              .append('text')
+              .style("pointer-events", "none")
+              .attr({'class':'edgelabel',
+                     'id':function(d,i){return 'edgelabel'+i},
+                     'dx':80,
+                     'dy':0,
+                     'font-size':12,
+                     'fill':'#464646'});
+
+          edgelabels.append('textPath')
+              .attr('xlink:href',function(d,i) {return '#edgepath'+i})
+              .style("pointer-events", "none")
+              .text(function(d){return d.label});
+
+
+          svg.append('defs').append('marker')
+              .attr({'id':'arrowhead',
+                     'viewBox':'-0 -5 10 10',
+                     'refX':25,
+                     'refY':0,
+                     //'markerUnits':'strokeWidth',
+                     'orient':'auto',
+                     'markerWidth':10,
+                     'markerHeight':10,
+                     'xoverflow':'visible'})
+              .append('svg:path')
+                  .attr('d', 'M 0,-5 L 10 ,0 L 0,5')
+                  .attr('fill', '#ccc')
+                  .attr('stroke','#ccc');
+           
+
+          force.on("tick", function(){
+
+              edges.attr({"x1": function(d){return d.source.x;},
+                          "y1": function(d){return d.source.y;},
+                          "x2": function(d){return d.target.x;},
+                          "y2": function(d){return d.target.y;}
+              });
+
+              nodes.attr({"cx":function(d){return d.x;},
+                          "cy":function(d){return d.y;}
+              });
+
+              nodelabels.attr("x", function(d) { return d.x; }) 
+                        .attr("y", function(d) { return d.y; });
+
+              edgepaths.attr('d', function(d) { var path='M '+d.source.x+' '+d.source.y+' L '+ d.target.x +' '+d.target.y;
+                                                 //console.log(d)
+                                                 return path});       
+
+              edgelabels.attr('transform',function(d,i){
+                  if (d.target.x<d.source.x){
+                      bbox = this.getBBox();
+                      rx = bbox.x+bbox.width/2;
+                      ry = bbox.y+bbox.height/2;
+                      return 'rotate(180 '+rx+' '+ry+')';
+                      }
+                  else {
+                      return 'rotate(0)';
+                      }
+              });
+          });
+
+        }
+
+        // listent search request
+        listen_search()
+    </script>  
+	
+
+  </body>
+</html>
