@@ -21,7 +21,7 @@ Neo4j
 # Results
 
 ## 人物关系知识图谱
-TODO
+[persons relations](https://github.com/liuyuzhangolvz/novel-kg/blob/master/docs/graph.png)
 
 ## 图谱问答系统
 TODO
