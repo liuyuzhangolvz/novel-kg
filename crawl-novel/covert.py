@@ -4,7 +4,7 @@ import os
 from pymongo import MongoClient
 
 mongo = MongoClient()
-db = mongo['yinyong']['xiaoshuo']
+db = mongo['jinyong']['xiaoshuo']
 dirname = "F:/jinyong/data/books"
 
 for book_obj in db.find():
