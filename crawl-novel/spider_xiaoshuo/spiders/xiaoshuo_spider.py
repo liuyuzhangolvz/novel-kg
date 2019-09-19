@@ -6,7 +6,7 @@ from urllib.request import urlopen
 from pymongo import MongoClient
 
 mongo=MongoClient()
-db=mongo["yinyong"]["xiaoshuo"]
+db=mongo["jinyong"]["xiaoshuo"]
 
 re_paragraph = re.compile('(?<=<p>).*?(?=</p>)')
 
