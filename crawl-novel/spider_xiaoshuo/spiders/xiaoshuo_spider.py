@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
-import scrapy
+
 import re
+import scrapy
 from urllib.request import urlopen
 from pymongo import MongoClient
 
 mongo=MongoClient()
-db=mongo["yz"]["xiaoshuo"]
+db=mongo["yinyong"]["xiaoshuo"]
 
 re_paragraph = re.compile('(?<=<p>).*?(?=</p>)')
 
@@ -13,24 +14,25 @@ class XiaoshuoSpider(scrapy.Spider):
     name = 'xiaoshuo_spider'
     allowed_domains = ['jinyongwang.com']
     start_urls = [
-        'http://www.jinyongwang.com/fei/',#·ÉºüÍâ´«
-        'http://www.jinyongwang.com/xue/',#Ñ©É½·Éºü
-        'http://www.jinyongwang.com/lian/',#Á¬³Ç¾÷
-        'http://www.jinyongwang.com/tian/',#ÌìÁú°Ë²¿
-        'http://www.jinyongwang.com/she/',#ÉäµñÓ¢ĞÛ´«
-        'http://www.jinyongwang.com/bai/',#°×ÂíĞ¥Î÷·ç
-        'http://www.jinyongwang.com/lu/',#Â¹¶¦¼Ç
-        'http://www.jinyongwang.com/xiao/',#Ğ¦°Á½­ºş
-        'http://www.jinyongwang.com/shu/',#Êé½£¶÷³ğÂ¼
-        'http://www.jinyongwang.com/shen/',#ÉñµñÏÀÂÂ
-        'http://www.jinyongwang.com/xia/',#ÏÀ¿ÍĞĞ
-        'http://www.jinyongwang.com/yi/',#ÒĞÌìÍÀÁú¼Ç
-        'http://www.jinyongwang.com/bi/',#±ÌÑª½£
-        'http://www.jinyongwang.com/yuan/',#Ô§Ñìµ¶
-        'http://www.jinyongwang.com/yue/',#Ô½Å®½£
-    ] #½ğÓ¹ÍõÈ«Ì×Ğ¡Ëµ
+        'http://www.jinyongwang.com/fei/',
+        'http://www.jinyongwang.com/xue/',
+        'http://www.jinyongwang.com/lian/',
+        'http://www.jinyongwang.com/tian/',
+        'http://www.jinyongwang.com/she/',
+        'http://www.jinyongwang.com/bai/',
+        'http://www.jinyongwang.com/lu/',
+        'http://www.jinyongwang.com/xiao/',
+        'http://www.jinyongwang.com/shu/',
+        'http://www.jinyongwang.com/shen/',
+        'http://www.jinyongwang.com/xia/',
+        'http://www.jinyongwang.com/yi/',
+        'http://www.jinyongwang.com/bi/',
+        'http://www.jinyongwang.com/yuan/',
+        'http://www.jinyongwang.com/yue/',
+        
+    ] #é‡‘åº¸ç‹å…¨å¥—å°è¯´
  
-    #»ñÈ¡Ğ¡ËµÕÂ½ÚµÄURL
+    #è·å–å°è¯´ç« èŠ‚çš„URL
     def parse(self, response):
 
         cnt_url = "/".join(response._url.strip("/").split("/")[:-1])
