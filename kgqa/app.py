@@ -9,7 +9,7 @@ from pymongo import MongoClient
 
 # mongodb 操作对象
 mongo = MongoClient()
-db = mongo["yz"]["persons"]
+db = mongo["jinyong"]["persons"]
 
 # flask 实例对象
 app = Flask(__name__)
