@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import jieba
-import jieba.posseg as pseg
-
+import xmnlp
 from pymongo import MongoClient
 
 # 定义 mongodb 连接对象
@@ -15,7 +13,7 @@ print("start processing...")
 persons = []
 for book_obj in db.find():
     for chapter in book_obj["chapters"]:
-        for word, tag in pseg.cut(chapter['content']):
+        for word, tag in xmnlp.tag(chapter['content']):
             if tag == "nr":
               persons.append(word)
 print("save to {}...".format(save_path))
