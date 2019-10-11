@@ -8,10 +8,10 @@ import scrapy
 from pymongo import MongoClient
 
 # 常量
-PERSONS_FILE = 'F:/jinyong/data/persons.txt' # 人物列表存放地址，这里最好用绝对地址哦
 DB_NAME = 'jinyong'   # mongodb 库名
 TABLE_NAME = 'persons'  # mongodb 表名
 DROP_KEYS = ['中文名', '饰演', '配音']  # 要删除的 info 键名
+PERSONS_FILE = 'F:/jinyong/data/persons.txt' # 人物列表存放地址，这里最好用绝对地址哦
 KEYWORDS = ['金庸', '飞狐外传', '雪山飞狐', '连城诀', '天龙八部', '射雕英雄传',
         '白马啸西风', '鹿鼎记', '笑傲江湖', '书剑恩仇录', '神雕侠侣',
         '侠客行', '倚天屠龙记', '碧血剑', '鸳鸯刀', '越女剑']
@@ -19,7 +19,7 @@ KEYWORDS = ['金庸', '飞狐外传', '雪山飞狐', '连城诀', '天龙八部
 # 变量
 mongo = MongoClient()  # mongodb 的操作对象，使用默认参数即可
 mongo[DB_NAME].drop_collection(TABLE_NAME)  # 删除 persons 数据库，好重写
-db = mongo[DB_NAME][TABLE_NAME]  # yz 是 mongo 的数据库， persons 是库 yz 下的一张表
+db = mongo[DB_NAME][TABLE_NAME]  # jinyong 是 mongo 的数据库， persons 是库 jinyong 下的一张表
 re_split = re.compile(r'[,、，；]')  # 字符串切割正则
 re_match = re.compile(r'({})'.format('|'.join(KEYWORDS)))  # 生成关键词正则，表示网页中必须最少含有这些关键词的一个
 
