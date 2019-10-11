@@ -5,4 +5,4 @@
 ## 2. MongoDB 转 txt
 运行 covert.py
 ## 3. 提取人名
-运行 fenci.py 
+运行 extract_persons.py 
