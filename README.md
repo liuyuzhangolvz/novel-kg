@@ -25,9 +25,9 @@ python convert.py
 ```
 **2.获取小说中的人名**
 
-执行 fenci.py ，对小说文本进行词法分析，提取出人名
+执行 extract_persons.py ，对小说文本进行词法分析，提取出人名
 ```
-python fenci.py
+python extract_persons.py
 ```
 **3.通过人名爬取百度百科**
 
